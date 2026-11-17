@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>纳米Work 企业版 · 新一代企业智能体工作平台</title>
+<style>
+  :root{
+    --ink:#0B1B33; --ink2:#233653; --muted:#6B7A93; --line:#E7ECF3;
+    --orange:#FF5A1F; --orange2:#FF8A3D; --orange-soft:#FFF2EA;
+    --blue:#2E6BFF; --blue-soft:#EEF3FF; --teal:#0BA3A0;
+    --bg:#F6F8FC; --card:#FFFFFF; --radius:18px;
+    --shadow:0 12px 40px rgba(16,36,68,.07); --shadow2:0 6px 20px rgba(16,36,68,.06);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    color:var(--ink2); background:var(--bg); line-height:1.7; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+  h1,h2,h3,h4{color:var(--ink);line-height:1.25;font-weight:800;letter-spacing:-.02em}
+  a{text-decoration:none;color:inherit}
+  .eyebrow{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.12em;color:var(--orange);text-transform:uppercase;margin-bottom:14px}
+  .sec{padding:96px 0}
+  .sec-hd{text-align:center;max-width:760px;margin:0 auto 56px}
+  .sec-hd h2{font-size:38px;margin-bottom:14px}
+  .sec-hd p{font-size:17px;color:var(--muted)}
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(246,248,252,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--ink)}
+  .brand .dot{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--orange),var(--orange2));display:grid;place-items:center;color:#fff;font-size:14px;box-shadow:0 4px 12px rgba(255,90,31,.35)}
+  .brand small{font-size:11px;font-weight:700;color:var(--muted);border-left:1px solid var(--line);padding-left:10px;margin-left:2px}
+  .navlinks{display:flex;gap:26px;font-size:14px;font-weight:600;color:var(--ink2)}
+  .navlinks a{transition:color .2s}
+  .navlinks a:hover,.navlinks a.active{color:var(--orange)}
+  .btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;font-family:inherit;font-weight:700;font-size:14px;padding:11px 22px;border-radius:10px;transition:transform .2s,box-shadow .2s,background .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-o{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;box-shadow:0 8px 20px rgba(255,90,31,.3)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn-lg{padding:15px 30px;font-size:16px;border-radius:12px}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden;background:radial-gradient(1000px 500px at 78% -10%,rgba(46,107,255,.22),transparent 60%),linear-gradient(135deg,#0B1B33,#14294A 60%,#0D213F);color:#fff;padding:96px 0 0}
+  .hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,#000,transparent 85%)}
+  .hero .wrap{position:relative;z-index:2}
+  .hero-tag{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:7px 16px;border-radius:100px;font-size:13px;font-weight:600;margin-bottom:28px}
+  .hero-tag i{width:7px;height:7px;border-radius:50%;background:#4ADE80;box-shadow:0 0 0 4px rgba(74,222,128,.18)}
+  .hero h1{color:#fff;font-size:60px;letter-spacing:-.03em;margin-bottom:20px}
+  .hero h1 .hl{background:linear-gradient(135deg,#FFB27A,var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .lead{font-size:21px;font-weight:600;color:#E9F0FB;max-width:760px;margin-bottom:14px}
+  .hero .sub{font-size:16px;color:#A9BAD4;max-width:720px;margin-bottom:34px}
+  .hero .sub b{color:#FFD0BB;font-weight:700}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+  .hero .btn-ghost{color:#fff;border-color:rgba(255,255,255,.28)}
+  .hero .btn-ghost:hover{background:rgba(255,255,255,.08)}
+  .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:76px;border-top:1px solid rgba(255,255,255,.12)}
+  .stat{padding:30px 10px 34px;text-align:center;border-right:1px solid rgba(255,255,255,.1)}
+  .stat:last-child{border-right:0}
+  .stat .num{font-size:34px;font-weight:800;color:#fff;letter-spacing:-.02em}
+  .stat .num span{color:var(--orange2)}
+  .stat .lbl{font-size:13px;color:#9FB2CE;margin-top:4px}
+
+  /* COMPARE */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#fff;box-shadow:var(--shadow)}
+  .cmp-col{padding:38px}
+  .cmp-col.old{background:#F9FAFC}
+  .cmp-col.new{background:linear-gradient(160deg,#FFF7F2,#FFF)}
+  .cmp-head{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+  .cmp-head .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px}
+  .cmp-col.old .ic{background:#EEF1F6}
+  .cmp-col.new .ic{background:var(--orange-soft)}
+  .cmp-head h3{font-size:21px}
+  .cmp-head .cap{font-size:12px;color:var(--muted);font-weight:600}
+  .cmp-row{display:flex;gap:14px;padding:15px 0;border-top:1px dashed var(--line)}
+  .cmp-row .k{flex:0 0 74px;font-size:13px;font-weight:700;color:var(--muted);padding-top:2px}
+  .cmp-row .v{font-size:15px;color:var(--ink2)}
+  .cmp-col.new .cmp-row .v{font-weight:600;color:var(--ink)}
+  .cmp-row .v em{font-style:normal;color:var(--orange);font-weight:700}
+  .one-line{text-align:center;font-size:17px;font-weight:700;color:var(--ink);margin-top:30px}
+  .one-line b{color:var(--orange)}
+
+  /* ADVANTAGE */
+  .adv-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+  .adv{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px 22px;box-shadow:var(--shadow2);transition:transform .25s,box-shadow .25s}
+  .adv:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+  .adv .n{font-size:13px;font-weight:800;color:var(--orange);letter-spacing:.06em}
+  .adv .ic{font-size:30px;margin:12px 0 14px}
+  .adv h4{font-size:18px;margin-bottom:9px}
+  .adv p{font-size:13.5px;color:var(--muted)}
+
+  /* SCENES */
+  .scene-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .scene{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow2);transition:transform .25s,border-color .25s}
+  .scene:hover{transform:translateY(-5px);border-color:#FFCDB8}
+  .scene .ic{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,var(--blue-soft),var(--orange-soft));display:grid;place-items:center;font-size:22px;margin-bottom:16px}
+  .scene h4{font-size:17px;margin-bottom:8px}
+  .scene p{font-size:13.5px;color:var(--muted);margin-bottom:14px}
+  .scene .gain{font-size:12.5px;font-weight:700;color:var(--orange);background:var(--orange-soft);padding:6px 11px;border-radius:8px;display:inline-block}
+
+  /* ORG (dark band) */
+  .org{background:linear-gradient(135deg,#0B1B33,#152A4A);color:#fff;position:relative;overflow:hidden}
+  .org .sec-hd h2{color:#fff}
+  .org .sec-hd p{color:#A9BAD4}
+  .org .eyebrow{color:var(--orange2)}
+  .org-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .org-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:28px 24px;transition:background .25s,transform .25s}
+  .org-card:hover{background:rgba(255,255,255,.09);transform:translateY(-5px)}
+  .org-card .ic{font-size:26px;margin-bottom:14px}
+  .org-card h4{color:#fff;font-size:18px;margin-bottom:8px}
+  .org-card p{font-size:13.5px;color:#A9BAD4}
+
+  /* TECH */
+  .tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .tech{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow2);position:relative;overflow:hidden}
+  .tech:before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--orange),var(--orange2))}
+  .tech .no{font-size:12px;font-weight:800;color:var(--orange);letter-spacing:.1em}
+  .tech .ic{font-size:28px;margin:12px 0 12px}
+  .tech h4{font-size:19px;margin-bottom:6px}
+  .tech .slogan{font-size:13.5px;font-weight:700;color:var(--blue);margin-bottom:12px}
+  .tech p{font-size:13.5px;color:var(--muted)}
+  .tech .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+  .tech .chip{font-size:11px;font-weight:600;background:#F4F6FA;color:var(--ink2);padding:4px 10px;border-radius:6px}
+
+  /* STEPS */
+  .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:52px}
+  .flow-step{position:relative;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow2)}
+  .flow-step .bignum{font-size:44px;font-weight:800;color:#EEF1F6;line-height:1;position:absolute;top:18px;right:22px}
+  .flow-step h4{font-size:18px;margin-bottom:10px;position:relative}
+  .flow-step p{font-size:13.5px;color:var(--muted);position:relative}
+  .flow-step:not(:last-child):after{content:"→";position:absolute;right:-19px;top:50%;transform:translateY(-50%);color:var(--orange);font-size:22px;font-weight:800;z-index:3}
+  .timeline{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:34px;box-shadow:var(--shadow2)}
+  .timeline h3{font-size:20px;margin-bottom:24px;text-align:center}
+  .tl-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;position:relative}
+  .tl-grid:before{content:"";position:absolute;top:20px;left:8%;right:8%;height:2px;background:var(--line)}
+  .tl{padding-top:0;text-align:center;position:relative}
+  .tl .circled{width:40px;height:40px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-weight:800;margin:0 auto 14px;position:relative;z-index:2;box-shadow:0 0 0 6px var(--orange-soft)}
+  .tl h4{font-size:15px;margin-bottom:5px}
+  .tl p{font-size:12px;color:var(--muted)}
+
+  /* ECO */
+  .eco-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:22px}
+  .eco-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:34px;box-shadow:var(--shadow2)}
+  .eco-card h3{font-size:21px;margin-bottom:8px}
+  .eco-card>.desc{font-size:14px;color:var(--muted);margin-bottom:22px}
+  .badges{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .badge{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--ink2);background:#F8FAFD;border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  .badge .tick{color:var(--teal);font-weight:900;flex:0 0 auto}
+  .cert-row{display:flex;gap:10px;margin-bottom:18px}
+  .cert{flex:1;border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center;background:linear-gradient(160deg,#FFF8F3,#fff)}
+  .cert .lv{font-size:22px;font-weight:800;color:var(--orange)}
+  .cert .nm{font-size:12px;color:var(--ink2);font-weight:700;margin-top:3px}
+  .cert .dt{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
+  .eco-note{font-size:12.5px;color:var(--muted);line-height:1.7}
+  .eco-note b{color:var(--ink2)}
+  .price{margin-top:16px;background:#F8FAFD;border:1px dashed #CFD9E8;border-radius:12px;padding:16px}
+  .price .p-h{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.06em;margin-bottom:8px}
+  .price .p-l{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:var(--ink2)}
+  .price .p-l b{color:var(--orange)}
+  .price .p-foot{font-size:11px;color:#93A0B5;margin-top:8px}
+
+  /* CTA */
+  .cta{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;text-align:center;padding:80px 0}
+  .cta h2{color:#fff;font-size:36px;margin-bottom:14px}
+  .cta p{font-size:17px;color:rgba(255,255,255,.9);margin-bottom:28px}
+  .cta .btn-o{background:#fff;color:var(--orange);box-shadow:0 10px 24px rgba(0,0,0,.12)}
+
+  footer{background:#0B1B33;color:#8FA2BF;text-align:center;padding:30px 0;font-size:12.5px}
+  footer b{color:#C9D6E8}
+
+  @media(max-width:980px){
+    .stats{grid-template-columns:repeat(3,1fr)}
+    .stat:nth-child(3){border-right:0}
+    .adv-grid{grid-template-columns:repeat(2,1fr)}
+    .scene-grid,.tech-grid{grid-template-columns:repeat(2,1fr)}
+    .org-grid{grid-template-columns:repeat(2,1fr)}
+    .eco-grid{grid-template-columns:1fr}
+    .navlinks{display:none}
+    .hero h1{font-size:44px}
+  }
+  @media(max-width:640px){
+    .sec{padding:64px 0}
+    .sec-hd h2{font-size:28px}
+    .hero h1{font-size:34px}
+    .hero .lead{font-size:17px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .compare,.flow{grid-template-columns:1fr}
+    .flow-step:not(:last-child):after{display:none}
+    .adv-grid,.scene-grid,.tech-grid,.org-grid{grid-template-columns:1fr}
+    .tl-grid{grid-template-columns:1fr;gap:18px}
+    .tl-grid:before{display:none}
+    .tl{display:flex;align-items:center;gap:14px;text-align:left}
+    .tl .circled{margin:0}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="dot">N</span>纳米Work<small>企业版</small></div>
+    <div class="navlinks">
+      <a href="#position">定位</a>
+      <a href="#advantage">产品优势</a>
+      <a href="#scene">应用场景</a>
+      <a href="#tech">技术亮点</a>
+      <a href="#start">快速上手</a>
+      <a href="#eco">生态保障</a>
+    </div>
+    <a href="#cta" class="btn btn-o">立即体验</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-tag"><i></i>360 出品 · 新一代企业智能体工作平台</div>
+    <h1>纳米 <span class="hl">Work</span> 企业版</h1>
+    <p class="lead">让 AI 从「员工的个人工具」，变成「企业的组织能力」。</p>
+    <p class="sub">组织级 AI 工作台 · 能力沉淀 · 透明协同 · 系统连通 · 算力管理。<br>记住一句：对话式大模型是<b>「一个只动嘴的顾问」</b>，纳米Work是<b>「一支能交活的员工团队」</b>。</p>
+    <div class="hero-cta">
+      <a href="#cta" class="btn btn-o btn-lg">立即开始 →</a>
+      <a href="#position" class="btn btn-ghost btn-lg">了解产品能力</a>
+    </div>
+    <div class="stats reveal">
+      <div class="stat"><div class="num">500<span>+</span></div><div class="lbl">岗位专家 开箱即用</div></div>
+      <div class="stat"><div class="num">1000<span>+</span></div><div class="lbl">大模型可调度</div></div>
+      <div class="stat"><div class="num">7×24</div><div class="lbl">云端不眠不休</div></div>
+      <div class="stat"><div class="num">50<span>城</span></div><div class="lbl">FDE 工程师陪跑</div></div>
+      <div class="stat"><div class="num">20<span>年</span></div><div class="lbl">360 安全积累</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- POSITION -->
+<section class="sec" id="position">
+  <div class="wrap">
+    <div class="sec-hd reveal">
+      <span class="eyebrow">Product Positioning</span>
+      <h2>纳米Work ≠ 聊天机器人</h2>
+      <p>同样是 AI，差别在于：一个只会回答问题，一支能替你把活干完。</p>
+    </div>
+    <div class="compare reveal">
+      <div class="cmp-col old">
+        <div class="cmp-head"><div class="ic">💬</div><div><h3>对话式大模型</h3><div class="cap">一个会聊天的工具 · 像「咨询台」</div></div></div>
+        <div class="cmp-row"><div class="k">定位</div><div class="v">一个会聊天的工具</div></div>
+        <div class="cmp-row"><div class="k">工作方式</div><div class="v">你问一句，它答一段话（像聊天框）</div></div>
+        <div class="cmp-row"><div class="k">记忆</div><div class="v">一次性，问完就忘，下次归零（像金鱼）</div></div>
+        <div class="cmp-row"><div class="k">交付物</div><div class="v">只给你一段文字（半成品）</div></div>
+        <div class="cmp-row"><div class="k">要不要盯</div><div class="v">你说一句它动一下（像挤牙膏）</div></div>
+      </div>
+      <div class="cmp-col new">
+        <div class="cmp-head"><div class="ic">👥</div><div><h3>纳米Work · AI 专家工作台</h3><div class="cap">一整支只懂你的 AI 专家团队 · 像「员工团队」</div></div></div>
+        <div class="cmp-row"><div class="k">定位</div><div class="v">一整支只懂你的 <em>AI 专家团队</em></div></div>
+        <div class="cmp-row"><div class="k">工作方式</div><div class="v">主动搜索、调用工具，<em>从头到尾把事干完</em></div></div>
+        <div class="cmp-row"><div class="k">记忆</div><div class="v">长期记忆层，<em>越用越懂你业务</em>（像老员工）</div></div>
+        <div class="cmp-row"><div class="k">交付物</div><div class="v">给你成果文件：<em>PPT / 报告 / 表格</em></div></div>
+        <div class="cmp-row"><div class="k">要不要盯</div><div class="v">交代一句干到完成，<em>可定时自动跑</em></div></div>
+      </div>
+    </div>
+    <p class="one-line reveal">一句话：<b>对话式大模型是「能聊天的工具」，纳米Work是「会干活的团队」。</b></p>
+  </div>
+</section>
+
+<!-- ADVANTAGE -->
+<section class="sec" id="advantage" style="background:#fff">
+  <div class="wrap">
+    <div class="sec-hd reveal">
+      <span class="eyebrow">Why NanoWork</span>
+      <h2>五大产品优势</h2>
+      <p>给先进企业打造的 AI 工作台：买来就能用，用了属于企业，成本可控、安全有保障、还有人陪跑。</p>
+    </div>
+    <div class="adv-grid">
+      <div class="adv reveal"><div class="n">01</div><div class="ic">📦</div><h4>开箱即用</h4><p>内置 500+ 岗位专家，无需复杂配置，安装即用。</p></div>
+      <div class="adv reveal"><div class="n">02</div><div class="ic">🏢</div><h4>企业级定位</h4><p>能力沉淀、透明协同、系统连通、企业级智能体架构，AI 真正属于企业。</p></div>
+      <div class="adv reveal"><div class="n">03</div><div class="ic">💰</div><h4>成本可控</h4><p>资源、成本、权限统一管控，每一分钱花得明白。</p></div>
+      <div class="adv reveal"><div class="n">04</div><div class="ic">🛡️</div><h4>安全可靠</h4><p>依托 360 国家级安全能力，数据隔离保护，数据安全有保障。</p></div>
+      <div class="adv reveal"><div class="n">05</div><div class="ic">🤝</div><h4>服务保障</h4><p>赠送专属 FDE 服务团队陪跑，不光卖给你，还教会你用。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENES -->
+<section class="sec" id="scene">
+  <div class="wrap">
+    <div class="sec-hd reveal">
+      <span class="eyebrow">Use Cases</span>
+      <h2>七大应用场景</h2>
+      <p>从战略决策到日常运营，一支 AI 专家团队覆盖企业核心工作流。</p>
+    </div>
+    <div class="scene-grid">
+      <div class="scene reveal"><div class="ic">🎯</div><h4>定战略 · 做决策</h4><p>组建多专家视角顾问团，并行输出战略结论。</p><span class="gain">像请了一家咨询公司</span></div>
+      <div class="scene reveal"><div class="ic">✏️</div><h4>做内容</h4><p>方案、文案、公众号、小红书、海报、PPT。</p><span class="gain">一句话出稿</span></div>
+      <div class="scene reveal"><div class="ic">📈</div><h4>获客 · 做增长</h4><p>海报、视频、投放策略、数据复盘。</p><span class="gain">全链路包办</span></div>
+      <div class="scene reveal"><div class="ic">💻</div><h4>开发</h4><p>写程序、跑命令、调试、多代理协作。</p><span class="gain">不懂代码也能上线系统</span></div>
+      <div class="scene reveal"><div class="ic">📋</div><h4>法务 · 财务</h4><p>审合同、对账、合规检查。</p><span class="gain">替代外部顾问</span></div>
+      <div class="scene reveal"><div class="ic">🔍</div><h4>调研分析</h4><p>行业洞察、竞品监控、投研分析。</p><span class="gain">多源交叉验证</span></div>
+      <div class="scene reveal"><div class="ic">⚙️</div><h4>自动化运营</h4><p>盯标、调价、接单、日报、周报。</p><span class="gain">7×24 无人值守</span></div>
+      <div class="scene reveal" style="display:flex;flex-direction:column;justify-content:center;background:linear-gradient(135deg,var(--ink),#1B3358);border:0">
+        <div style="font-size:15px;font-weight:700;color:#fff;line-height:1.6">让 AI 走进企业核心业务场景，<br>掌握智能体协作正在成为<br><span style="color:#FFB27A">未来岗位的通用能力。</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORG -->
+<section class="sec org" id="org">
+  <div class="wrap">
+    <div class="sec-hd reveal">
+      <span class="eyebrow">Enterprise Only</span>
+      <h2>企业版独有 · 四大组织级能力</h2>
+      <p>把员工个人用 AI 的经验，沉淀成整个组织可复用的资产。</p>
+    </div>
+    <div class="org-grid">
+      <div class="org-card reveal"><div class="ic">🧮</div><h4>算力管理</h4><p>团队席位 · 算力分配 · 使用数据 · 模型权限，统一管控。</p></div>
+      <div class="org-card reveal"><div class="ic">🔗</div><h4>透明协同</h4><p>共享知识库 · 多人多 Agent 同一上下文，协作可见。</p></div>
+      <div class="org-card reveal"><div class="ic">🌱</div><h4>能力沉淀</h4><p>专家 / 技能 / 任务公开，1 人摸索，全组织受益。</p></div>
+      <div class="org-card reveal"><div class="ic">🔌</div><h4>系统连通</h4><p>直达内网系统 · 像员工一样操作浏览器，连接业务。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH -->
+<section class="sec" id="tech" style="background:#fff">
+  <div class="wrap">
+    <div class="sec-hd reveal">
+      <span class="eyebrow">Technology</span>
+      <h2>六大技术亮点</h2>
+      <p>引擎可换、模型可选、云端运行、模式灵活、专家可训、原生安全。</p>
+    </div>
+    <div class="tech-grid">
+      <div class="tech reveal"><div class="no">亮点 01</div><div class="ic">🧠</div><h4>多智能体引擎</h4><div class="slogan">谁强，就用谁</div><p>换引擎像换电池——记忆、技能、智能体全都不丢，永远保持领先；企业级引擎支持百万人并发。</p><div class="chips"><span class="chip">纳米蜂群</span><span class="chip">Claude Code</span><span class="chip">Codex</span><span class="chip">任意引擎接入</span></div></div>
+      <div class="tech reveal"><div class="no">亮点 02</div><div class="ic">🌐</div><h4>多模型底座</h4><div class="slogan">一个账号 = 1000 个订阅账户</div><p>100+ 多模态模型、1000+ LLM 智能调度：简单问题用快模型，专业问题用专业模型，复杂问题用强模型。</p><div class="chips"><span class="chip">DeepSeek V4</span><span class="chip">Kimi K3</span><span class="chip">Qwen 3.8</span><span class="chip">GLM 5.2</span></div></div>
+      <div class="tech reveal"><div class="no">亮点 03</div><div class="ic">☁️</div><h4>云端办公室</h4><div class="slogan">7×24 不眠不休，安全性最高</div><p>智能体在云上干活，与你电脑彻底隔离、不占本地资源；睡前布置任务，手机 / PC / Mac 随时验收。</p><div class="chips"><span class="chip">彻底隔离</span><span class="chip">云端存储</span><span class="chip">随时遥控</span></div></div>
+      <div class="tech reveal"><div class="no">亮点 04</div><div class="ic">🎛️</div><h4>多工作模式</h4><div class="slogan">按任务复杂度选模式，不为简单任务多花钱</div><p>边想边做（简单任务分钟级出结果）／先规划再执行（不跑偏）／盯住目标做到底（超预期完成）。</p><div class="chips"><span class="chip">边想边做</span><span class="chip">先规划再执行</span><span class="chip">做到底</span></div></div>
+      <div class="tech reveal"><div class="no">亮点 05</div><div class="ic">👨‍🏫</div><h4>多专家 · 专家教练</h4><div class="slogan">500+ 开箱专家 + 更懂你的专属专家</div><p>专家教练帮你喂资料、写提示词、配技能、连知识，训出懂你产品、流程和生意的专属专家。</p><div class="chips"><span class="chip">500+ 岗位专家</span><span class="chip">提示词工程</span><span class="chip">知识库接入</span></div></div>
+      <div class="tech reveal"><div class="no">亮点 06</div><div class="ic">🔐</div><h4>原生安全</h4><div class="slogan">出厂内置，不碰你不给的权限</div><p>云端隔离、云端存储、四重沙箱、技能白名单、360 机房保护；信通院办公智能体能力评估首批通过。</p><div class="chips"><span class="chip">四重沙箱</span><span class="chip">技能白名单</span><span class="chip">国家级安全</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- START -->
+<section class="sec" id="start">
+  <div class="wrap">
+    <div class="sec-hd reveal">
+      <span class="eyebrow">Get Started</span>
+      <h2>快速上手：三步开干</h2>
+      <p>从购买配置到第一个任务落地，路径清晰，无需技术背景。</p>
+    </div>
+    <div class="flow">
+      <div class="flow-step reveal"><div class="bignum">1</div><h4>管理员配置</h4><p>购买咨询销售顾问；后台配置人员、席位、算力、模型。</p></div>
+      <div class="flow-step reveal"><div class="bignum">2</div><h4>成员登录</h4><p>微信号 / 手机号 / 360 账号三种方式；选团队自动完成注册。</p></div>
+      <div class="flow-step reveal"><div class="bignum">3</div><h4>开始干活</h4><p>选专家直接对话，或让纳米Work直接派活儿。</p></div>
+    </div>
+    <div class="timeline reveal">
+      <h3>5 步完成第一个任务：选对专家 + 选对模式，说需求就能出成果</h3>
+      <div class="tl-grid">
+        <div class="tl"><div class="circled">1</div><h4>选专家</h4><p>5 个精选身份；不确定就用纳米Work</p></div>
+        <div class="tl"><div class="circled">2</div><h4>选对话模式</h4><p>边想边做／先规划／盯住目标</p></div>
+        <div class="tl"><div class="circled">3</div><h4>选思考深度</h4><p>低/中/标准/高/超高，决定想多深</p></div>
+        <div class="tl"><div class="circled">4</div><h4>说需求发送</h4><p>输入 / 引用文件或技能</p></div>
+        <div class="tl"><div class="circled">5</div><h4>看进度取成果</h4><p>「任务」看进度，「文件」取成果</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ECO -->
+<section class="sec" id="eco" style="background:#fff">
+  <div class="wrap">
+    <div class="sec-hd reveal">
+      <span class="eyebrow">Ecosystem & Assurance</span>
+      <h2>生态与保障</h2>
+      <p>360 数字安全「国家队」背书，配套人才认证与交付体系。</p>
+    </div>
+    <div class="eco-grid">
+      <div class="eco-card reveal">
+        <h3>360：数字安全与 AI 的「国家队」</h3>
+        <p class="desc">以国家战略为使命，以技术创新为驱动，持续筑牢数字安全底座。</p>
+        <div class="badges">
+          <div class="badge"><span class="tick">✓</span>科技部认定人工智能安全领域行业技术领军企业</div>
+          <div class="badge"><span class="tick">✓</span>国家人工智能标准化总体组大模型专题组联合组长</div>
+          <div class="badge"><span class="tick">✓</span>国家发改委认定「世界一流企业」</div>
+          <div class="badge"><span class="tick">✓</span>工信部认定 AI 安全链主企业</div>
+          <div class="badge"><span class="tick">✓</span>国家级 AI 安全平台 / 数据安全平台</div>
+          <div class="badge"><span class="tick">✓</span>信通院办公智能体能力评估首批通过（纳米Work）</div>
+        </div>
+        <div class="price">
+          <div class="p-h">合作套餐参考（合作伙伴场景）</div>
+          <div class="p-l"><span>ADE 学习费用</span><span>3280 元/人</span></div>
+          <div class="p-l"><span>纳米Work 1 人坐席（半年轻享版）</span><span>1180 元</span></div>
+          <div class="p-l"><b>打包价（原价合计 4460 × 0.8）</b><b>3568 元/人</b></div>
+          <div class="p-foot">价格与政策来自渠道合作伙伴管理材料，实际以最新官方政策为准。</div>
+        </div>
+      </div>
+      <div class="eco-card reveal">
+        <h3>ADE 智能体工程师认证</h3>
+        <p class="desc">构建「认证学习 → 持证准入 → 行业交付」闭环，一考双证（企业技术认证 + 国家人才工程认证）。</p>
+        <div class="cert-row">
+          <div class="cert"><div class="lv">ADEA</div><div class="nm">智能体工程师</div><div class="dt">独立搭建与测试<br>3280 元/人</div></div>
+          <div class="cert"><div class="lv">ADEP</div><div class="nm">高级工程师</div><div class="dt">方案设计与技术支持<br>6280 元/人</div></div>
+          <div class="cert"><div class="lv">ADEE</div><div class="nm">智能体专家</div><div class="dt">复杂业务专家方案<br>价格待定</div></div>
+        </div>
+        <p class="eco-note"><b>交付准入：</b>所有行业客户的纳米Work交付，须持三层认证；无认证不得参与交付项目，从制度上保障交付质量。<br><br><b>代理体系：</b>360 直签 → 南北区总代 → 省级代理（每省 1 家）→ 行业金牌（一省可多家）；行业客户的纳米Work交付由持证 ADE 完成。<br><br><b>FDE 陪跑：</b>全国 50 城专业 AI 工程师，云上 + 本地手把手教到会用，让 AI 真正落进企业工作流。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <div class="wrap">
+    <h2>立即开始</h2>
+    <p>打开纳米Work 企业版，完成你的第一个 AI 任务。</p>
+    <a href="#top" class="btn btn-o btn-lg">了解合作与体验 →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><b>纳米Work 企业版</b> · 新一代企业智能体工作平台　|　本介绍依据产品资料、销售培训与合作伙伴政策整理，数据以官方最新口径为准。</div>
+</footer>
+
+<script>
+  // 滚动渐入
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+
+  // 导航高亮
+  var links=document.querySelectorAll('.navlinks a');
+  var secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  window.addEventListener('scroll',function(){
+    var y=window.scrollY+120,cur=-1;
+    secs.forEach(function(s,i){if(s&&s.offsetTop<=y)cur=i});
+    links.forEach(function(a,i){a.classList.toggle('active',i===cur)});
+  });
+</script>
+</body>
+</html>
